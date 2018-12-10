@@ -9,6 +9,7 @@ import configparser
 import json
 import os 
 import time
+import socket
 
 app = Flask(__name__)
 
@@ -70,11 +71,18 @@ def sf_yzm():
     
     return json.dumps(state,ensure_ascii=False)
 
+def get_ip_address():
+    hostname=socket.gethostname()
+    ip=socket.gethostbyname(hostname)
+    return ip
+
 if __name__ == '__main__':
+    host_ip = get_ip_address()
+    print(host_ip)
     cf = configparser.ConfigParser()
     cf.read('test.conf')
     port = int(cf.get('http_server', 'http_server.port'))
     app.debug = True
     #app.run(host='192.168.0.22',port = port)
-    app.run(host='localhost',port = port)
+    app.run(host=host_ip,port = port)
     pass
